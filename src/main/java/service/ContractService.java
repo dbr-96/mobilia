@@ -9,13 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-
 public class ContractService extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		System.out.println("al menos llegué");
-	    String contractParam = request.getParameter("contractParam");
-
+		String contractParam = request.getParameter("contractParam");
 	    JSONObject jsonResponse = new JSONObject();
 	    jsonResponse.put("success", true);
 	    jsonResponse.put("Sending response...", contractParam);
@@ -27,5 +24,4 @@ public class ContractService extends HttpServlet {
 	    out.print(jsonResponse.toString());
 	    out.flush();
 	}
-
 }
