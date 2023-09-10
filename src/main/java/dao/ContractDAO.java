@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ContractDAO {
 
@@ -19,27 +20,63 @@ public class ContractDAO {
 		}
 	}
 
-	public static Object[] getContractByParam(Connection myConnection, String contractParam) throws SQLException {
+	public static ArrayList <Object[]> getContractByParam(Connection myConnection, String contractParam) throws SQLException {
 		boolean receivedConection = true;
 
 		if (myConnection == null) {
 			myConnection = getConnection();
 			receivedConection = false;
 		}
-		String query = "SELECT state FROM contracts WHERE contractCode = ?";
+		String query = "SELECT "
+				+ "co.contractCode, "
+				+ "co.state, "
+				+ "pr.address, "
+				+ "pr.type, "
+				+ "cbp.role, "
+				+ "pe.firstName, "
+				+ "pe.secondName, "
+				+ "pe.lastName, "
+				+ "pe.secondLastName "
+				+ "FROM "
+				+ "persons pe "
+				+ "LEFT JOIN contractbyperson cbp ON "
+				+ "pe.personId = cbp.personId "
+				+ "LEFT JOIN contracts co ON "
+				+ "co.contractId = cbp.contractId "
+				+ "LEFT JOIN properties pr ON "
+				+ "pr.propertyId = co.propertyId "
+				+ "WHERE "
+				+ "pe.firstName LIKE ? OR pe.secondName LIKE ? OR pe.lastName LIKE ? OR "
+				+ "pe.secondLastName LIKE ? OR pe.identityDocument LIKE ? OR pe.email LIKE ? OR "
+				+ "pr.address LIKE ? OR co.contractCode LIKE ? "
+				+ "ORDER BY co.contractCode DESC ";
+				
 		try {
 			PreparedStatement myStatement = myConnection.prepareStatement(query);
-			myStatement.setString(1, contractParam);
+			for (int i = 1; i <= 8; i++) {
+				myStatement.setString(i, contractParam);	
+			}
+			
 			ResultSet myResultSet = myStatement.executeQuery();
 
-			Object[] stateData = null;
+			ArrayList <Object[]> contracts = new ArrayList<>();
+			Object[] contractData = null;
 			while (myResultSet.next()) {
+				String contractCode = myResultSet.getString("contractCode");
 				String state = myResultSet.getString("state");
-				stateData = new Object [] {state};
+				String address = myResultSet.getString("address");
+				String role = myResultSet.getString("role");
+				String firstName = myResultSet.getString("firstName");
+				String secondName = myResultSet.getString("secondName");
+				String lastName = myResultSet.getString("lastName");
+				String secondLastName = myResultSet.getString("secondLastName");
+				contractData = new Object [] {contractCode,state, address, role, 
+						firstName, secondName, lastName, secondLastName};
+				contracts.add(contractData);
 			}
 			myResultSet.close();
 			myStatement.close();
-			return stateData;
+			return contracts;
 		} finally {
 			if (!receivedConection) {
 				myConnection.close();

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import manager.ContractManager;
@@ -31,10 +32,12 @@ public class ContractService extends HttpServlet {
 	
 	public void getContractByParam (HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
 	    String contractParam = request.getParameter("contractParam");
-	    JSONObject state = ContractManager.getContractByParam(contractParam);
+	    
+	    
+	    JSONArray contracts = ContractManager.getContractByParam(contractParam);
 	    JSONObject jsonResponse = new JSONObject();
 	    jsonResponse.put("success", true);
-	    jsonResponse.put("Sending response...", state);
+	    jsonResponse.put("Sending response...", contracts);
 	    
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
