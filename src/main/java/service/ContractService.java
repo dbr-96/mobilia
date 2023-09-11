@@ -17,6 +17,10 @@ import manager.ContractManager;
 public class ContractService extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.addHeader("Access-Control-Allow-Origin", "*");
+		response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+		response.addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+		
 		String action = request.getParameter("action");
 
 		if ("getContractByParam".equals(action)) {
