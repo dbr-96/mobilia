@@ -65,12 +65,13 @@ public class ContractDAO {
 				String contractCode = myResultSet.getString("contractCode");
 				String state = myResultSet.getString("state");
 				String address = myResultSet.getString("address");
+				String type = myResultSet.getString("type");
 				String role = myResultSet.getString("role");
 				String firstName = myResultSet.getString("firstName");
 				String secondName = myResultSet.getString("secondName");
 				String lastName = myResultSet.getString("lastName");
 				String secondLastName = myResultSet.getString("secondLastName");
-				contractData = new Object [] {contractCode,state, address, role, 
+				contractData = new Object [] {contractCode,state, address, type, role, 
 						firstName, secondName, lastName, secondLastName};
 				contracts.add(contractData);
 			}
