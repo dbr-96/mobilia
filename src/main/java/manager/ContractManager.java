@@ -13,21 +13,29 @@ public class ContractManager {
 
 	public static JSONArray getContractByParam (String contractParam) throws SQLException {
 		Connection myConnection = ContractDAO.getConnection();
-//		JSONObject state = new JSONObject();
 		ArrayList <Object[]> contracts = ContractDAO.getContractByParam(myConnection, contractParam);
 		JSONArray jsonContracts = new JSONArray();
-		
+	
+		String contractCode = "";
+		JSONObject jsonContract = null;
 		for (Object[] contract : contracts) {
-			JSONObject jsonContract = new JSONObject();
-			jsonContract.put("contractCode", contract[0]);
-			jsonContract.put("state", contract[1]);
-			jsonContract.put("address", contract[2]);
-			jsonContract.put("role", contract[3]);
-			jsonContract.put("firstName", contract[4]);
-			jsonContract.put("secondName", contract[5]);
-			jsonContract.put("lastName", contract[6]);
-			jsonContract.put("secondLastName", contract[7]);
-			jsonContracts.put(jsonContract);
+			String currentContractCode = (String)contract[0];
+			if(!contractCode.equals(currentContractCode)) {
+				contractCode = currentContractCode;
+				jsonContract = new JSONObject();
+				jsonContract.put("contractCode", contract[0]);
+				jsonContract.put("state", contract[1]);
+				jsonContract.put("address", contract[2]);
+				jsonContract.put("proprietor", new JSONArray());				
+				jsonContract.put("lessee", new JSONArray());				
+				jsonContract.put("solidaryDebtor", new JSONArray());				
+				jsonContracts.put(jsonContract);
+			} 
+			String personRole = (String) contract[3];
+			JSONArray personsByRole = (JSONArray) jsonContract.get(personRole);	
+			String personFullName = (String) contract[4] + (contract[5] != null ? " " +(String) contract[5]
+					: "") + " " + (String) contract[6] + " " + (String) contract[7];
+			personsByRole.put(personFullName);			
 		}
 		
 		myConnection.close();
