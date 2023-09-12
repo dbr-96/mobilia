@@ -11,6 +11,13 @@ import dao.ContractDAO;
 
 public class ContractManager {
 
+	/**
+	 * Retrieves contracts based on a parameter and returns a list of contracts in JSON format.
+	 *
+	 * @param contractParam The parameter used to filter contracts.
+	 * @return A JSONArray containing the information of the contracts found.
+	 * @throws SQLException If an error occurs while accessing the database.
+	 */
 	public static JSONArray getContractByParam (String contractParam) throws SQLException {
 		Connection myConnection = ContractDAO.getConnection();
 		ArrayList <Object[]> contracts = ContractDAO.getContractByParam(myConnection, contractParam);
@@ -37,9 +44,7 @@ public class ContractManager {
 			String personFullName = (String) contract[5] + (contract[6] != null ? " " +(String) contract[6]
 					: "") + " " + (String) contract[7] + " " + (String) contract[8];
 			personsByRole.put(personFullName);		
-			System.out.println(personsByRole.toString());
 		}
-		
 		myConnection.close();
 		return jsonContracts;
 	}

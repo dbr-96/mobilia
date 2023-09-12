@@ -8,7 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ContractDAO {
-
+	
+	/**
+	 * Gets a connection to the MySQL database.
+	 *
+	 * @return A connection to the MySQL database, or null if an exception occurs.
+	 */
 	public static Connection getConnection() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -19,7 +24,15 @@ public class ContractDAO {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * Gets a list of contracts and their details that match the search parameter.
+	 *
+	 * @param myConnection establishes the connection to the database.
+	 * @param contractParam is the search parameter used to search for contracts.
+	 * @return A list of object arrays containing contract information.
+	 * @throws SQLException If an error occurs while accessing the database.
+	 */
 	public static ArrayList <Object[]> getContractByParam(Connection myConnection, String contractParam) throws SQLException {
 		boolean receivedConection = true;
 
@@ -65,7 +78,6 @@ public class ContractDAO {
 				+ "ORDER BY "
 				+ "co.contractCode ";
 		
-				
 		try {
 			PreparedStatement myStatement = myConnection.prepareStatement(query);
 			for (int i = 1; i <= 8; i++) {
