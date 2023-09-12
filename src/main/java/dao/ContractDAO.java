@@ -46,15 +46,30 @@ public class ContractDAO {
 				+ "LEFT JOIN properties pr ON "
 				+ "pr.propertyId = co.propertyId "
 				+ "WHERE "
-				+ "pe.firstName LIKE ? OR pe.secondName LIKE ? OR pe.lastName LIKE ? OR "
-				+ "pe.secondLastName LIKE ? OR pe.identityDocument LIKE ? OR pe.email LIKE ? OR "
-				+ "pr.address LIKE ? OR co.contractCode LIKE ? "
-				+ "ORDER BY co.contractCode DESC ";
+				+ "co.contractCode IN( "
+				+ "SELECT "
+				+ "co.contractCode "
+				+ "FROM "
+				+ "contracts co "
+				+ "LEFT JOIN contractbyperson cbp ON "
+				+ "cbp.contractId = co.contractId "
+				+ "LEFT JOIN persons pe ON "
+				+ "pe.personId = cbp.personId "
+				+ "LEFT JOIN properties pr ON "
+				+ "pr.propertyId = co.propertyId "
+				+ "WHERE "
+				+ "pe.firstName LIKE ? OR pe.secondName LIKE ? "
+				+ "OR pe.lastName LIKE ? OR pe.secondLastName LIKE ? "
+				+ "OR pe.identityDocument LIKE ? OR pe.email LIKE ? "
+				+ "OR pr.address LIKE ? OR co.contractCode LIKE ?) "
+				+ "ORDER BY "
+				+ "co.contractCode ";
+		
 				
 		try {
 			PreparedStatement myStatement = myConnection.prepareStatement(query);
 			for (int i = 1; i <= 8; i++) {
-				myStatement.setString(i, contractParam);	
+				myStatement.setString(i, "%" + contractParam + "%");
 			}
 			
 			ResultSet myResultSet = myStatement.executeQuery();

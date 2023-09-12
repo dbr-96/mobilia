@@ -34,9 +34,10 @@ public class ContractManager {
 			} 
 			String personRole = (String) contract[4];
 			JSONArray personsByRole = (JSONArray) jsonContract.get(personRole);	
-			String personFullName = (String) contract[4] + (contract[5] != null ? " " +(String) contract[5]
-					: "") + " " + (String) contract[6] + " " + (String) contract[7];
-			personsByRole.put(personFullName);			
+			String personFullName = (String) contract[5] + (contract[6] != null ? " " +(String) contract[6]
+					: "") + " " + (String) contract[7] + " " + (String) contract[8];
+			personsByRole.put(personFullName);		
+			System.out.println(personsByRole.toString());
 		}
 		
 		myConnection.close();

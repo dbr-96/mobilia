@@ -36,8 +36,7 @@ public class ContractService extends HttpServlet {
 	
 	public void getContractByParam (HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException {
 	    String contractParam = request.getParameter("contractParam");
-	    
-	    
+	   
 	    JSONArray contracts = ContractManager.getContractByParam(contractParam);
 	    JSONObject jsonResponse = new JSONObject();
 	    jsonResponse.put("success", true);
